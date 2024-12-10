@@ -36,6 +36,11 @@ LEvans.chemsum <- LEvans.chem %>% select(-rep) %>% group_by(Sample) %>%
 
 LEvans.chemsum <- LEvans.chemsum %>% mutate(Sample = ifelse(Sample == "S", 0, Sample)) %>%
   mutate(Sample = as.numeric(Sample))
+
+#Data Summary for LEvans_241101 Data (DO, SPC, T_C)
+
+LEvans.chem2<- read.csv(here("data", "LEvans_241101.csv"))
+
 #Data Plots for Lake Evans Chemical Analysis Results
 
 NH4.pl <- LEvans.chemsum %>% ggplot(aes(x = NH4_mgNL_mn, y = Sample)) +
@@ -61,3 +66,23 @@ TDN.pl <- LEvans.chemsum %>% ggplot(aes(x = TDN_mgL_mn, y = Sample)) +
   geom_line(orientation = "y") +
   scale_y_reverse()
 print(TDN.pl+labs(y= "Depth in meters", x = "TDN (mg/L)")+ggtitle("Total Dissolved Nitrogen Concentration at Varying Depths "))
+
+DO.pl<-LEvans.chem2%>%ggplot(aes(x=DO_mgL, y=depth_cm)) +
+  geom_point(size=3) + geom_line() + scale_y_reverse() 
+print(DO.pl+labs(y= "Depth in centimeters", x = "Dissolved Oxygen (mg/L)")+
+        ggtitle("Dissolved Oxygen Concentration at Varying Depths "))
+
+DOpctsat.pl<-LEvans.chem2%>%ggplot(aes(x=depth_cm, y=DO_pctsat)) + 
+  geom_bar(stat = "identity", width=20)
+print(DOpctsat.pl+labs(y="Dissolved Oxygen Saturation (%)" , x ="Depth in centimeters" )+
+        ggtitle("Dissolved Oxygen Saturation at Varying Depths "))
+
+SPC.pl<-LEvans.chem2%>%ggplot(aes(x=SPC_uScm, y=depth_cm)) +
+  geom_point(size=3) + geom_path() + scale_y_reverse() 
+print(SPC.pl+labs(y= "Depth in centimeters", x = "Specific Conductivity (µS/cm)")+
+        ggtitle("Specific Conductivity at Varying Depths "))
+
+TC.pl<-LEvans.chem2%>%ggplot(aes(x=T_C, y=depth_cm)) +
+  geom_point(size=3) + geom_line() + scale_y_reverse() 
+print(TC.pl+labs(y= "Depth in centimeters", x = "Temperature (°C))")+
+        ggtitle("Temperature at Varying Depths "))
